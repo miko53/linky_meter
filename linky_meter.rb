@@ -16,24 +16,29 @@ require 'date'
 require 'mechanize'
 require 'json'
 
+##
+# This class is used to retrieve data from the electrical meter
 class LinkyMeter
-
-  LOGIN_URL = 'https://espace-client-connexion.enedis.fr/auth/UI/Login'
-  HOME_URL = 'https://mon-compte.enedis.fr/accueil'
-  CONSUMPTION_MONITORING_URL = 'https://espace-client-particuliers.enedis.fr/group/espace-particuliers/suivi-de-consommation'
   
-  REQUEST_WAR_NAME = 'lincspartdisplaycdc_WAR_lincspartcdcportlet'
-  
+  ## 
+  # the following constant are used to retrieve data by time interval
+  # use in +get+ method
   BY_YEAR = 0
   BY_MONTH = 1
   BY_DAY = 2
   BY_HOUR = 3
       
+  ##
+  # The constructor, the +activate_log+ boolean can be set to activate the loggin of http request
+  # if necessaory to debug them. the +log_filename+ is the file where log are saved.
   def new(activate_log = false, log_filename = 'mechanize.log')
     @log = activate_log
     @log_filename = log_filename
   end
   
+  ##
+  # the first function to call it permits to register on the website with your credentials
+  # +login+ and +password+ are two String
   def connect(login, password)
     create_agent()
     
@@ -62,6 +67,12 @@ class LinkyMeter
     end
   end
   
+  ##
+  # the main function of the class, can be called after successfull connection
+  # see +connect+
+  # the data are retrived from +begin_date+ to +end_date+ (two +DateTime+ objects)
+  # the data interval is specified with +step+ which can be +BY_YEAR+, +BY_MONTH+, +BY_DAY+ or +BY_HOUR+
+  # the `result` is a +JSON+ object provided by the server
   def get(begin_date, end_date, step)
     
     case step
@@ -112,6 +123,14 @@ class LinkyMeter
   
 protected
 
+  LOGIN_URL = 'https://espace-client-connexion.enedis.fr/auth/UI/Login'
+  HOME_URL = 'https://mon-compte.enedis.fr/accueil'
+  CONSUMPTION_MONITORING_URL = 'https://espace-client-particuliers.enedis.fr/group/espace-particuliers/suivi-de-consommation'
+  
+  REQUEST_WAR_NAME = 'lincspartdisplaycdc_WAR_lincspartcdcportlet'
+
+  ##
+  # This function initializes the +Mechanize+ agent used to get data from site  
   def create_agent()
     @agent =  Mechanize.new
     @agent.user_agent_alias = 'Mechanize'

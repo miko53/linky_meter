@@ -21,5 +21,14 @@ password = ENV['LINKY_PASSWORD']
 linky = LinkyMeter.new
 linky.connect(username, password)
 
+result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_YEAR)
+p result
+
+result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
+p result
+
 result = linky.get(DateTime.new(2020, 02, 13), DateTime.new(2020, 03, 13), LinkyMeter::BY_DAY)
+p result
+
+result = linky.get(DateTime.new(2020, 03, 13), DateTime.new(2020, 03, 14), LinkyMeter::BY_HOUR)
 p result

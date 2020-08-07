@@ -6,8 +6,11 @@ By the way, to avoid the capcha login, it is necessary to log before on a classi
 With this method, a login/password is required for the authentification
 
 authentification data shall be provided by the environnement
+
 -LINKY_USERNAME => login
+
 -LINKY_PASSWORD => password
+
 -LINKY_COOKIE_INTERNAL_AUTH_ID => the value of the cookie 'internalAuthId'
 
 

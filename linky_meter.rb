@@ -21,6 +21,12 @@ require 'byebug'
 # This class is used to retrieve data from the electrical meter
 class LinkyMeter
 
+protected
+  URL_ENEDIS_AUTHENTICATE = 'https://apps.lincs.enedis.fr/authenticate?target=https://mon-compte-particulier.enedis.fr/suivi-de-mesure/'  
+  URL_COOKIE = 'https://mon-compte-particulier.enedis.fr'
+  URL_USER_INFOS = 'https://apps.lincs.enedis.fr/userinfos'
+  URL_GET_PRMS_ID = 'https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/null/prms'
+  
 public  
   ## 
   # the following constant are used to retrieve data by time interval
@@ -48,8 +54,8 @@ public
     cookie = Mechanize::Cookie.new('internalAuthId', authentication_cookie)
     cookie.domain = ".enedis.fr"
     cookie.path = "/"
-    @agent.cookie_jar.add(URI.parse('https://mon-compte-particulier.enedis.fr'), cookie)
-    url = 'https://apps.lincs.enedis.fr/authenticate?target=https://mon-compte-particulier.enedis.fr/suivi-de-mesure/'
+    @agent.cookie_jar.add(URI.parse(URL_COOKIE), cookie)
+    url = URL_ENEDIS_AUTHENTICATE
     p "step 1 : authentification #{url}"
     r = @agent.get(url)
     if (r.code != "200") then
@@ -72,9 +78,9 @@ public
     end
     
     p 'get the location and the reqID'
-    p r.header['location']
+    #p r.header['location']
     reqID = r.header['location'].match(/ReqID%(.*?)%26/)[1]
-    p reqID
+    #p reqID
     
     #it should be possible to use r.header['location'] directly but they are some difference...
     url = "https://mon-compte.enedis.fr/auth/json/authenticate?realm=/enedis&forward=true&spEntityID=SP-ODW-PROD&goto=/auth/SSOPOST/metaAlias/enedis/providerIDP?ReqID%#{reqID}%26index%3Dnull%26acsURL%3Dhttps://apps.lincs.enedis.fr/saml/SSO%26spEntityID%3DSP-ODW-PROD%26binding%3Durn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AMAuthCookie="
@@ -108,7 +114,7 @@ public
     cookie = Mechanize::Cookie.new('enedisExt', auth_url_data['tokenId'])
     cookie.domain = ".enedis.fr"
     cookie.path = "/"
-    @agent.cookie_jar.add(URI.parse('https://mon-compte-particulier.enedis.fr'), cookie)
+    @agent.cookie_jar.add(URI.parse(URL_COOKIE), cookie)
     
     p "step 4 : retrieve the SAMLresponse"
     r = @agent.get(auth_url_data['successUrl'])
@@ -133,7 +139,7 @@ public
     #get information
     @av2_interne_id = ""
     p "get userinfos ==> retrieve  av2_interne_id"
-    r = @agent.get('https://apps.lincs.enedis.fr/userinfos')
+    r = @agent.get(URL_USER_INFOS)
     if (r.code != "200") then
       p 'authentication probably failed'
     else
@@ -143,7 +149,7 @@ public
      
     p 'retrieve primary key ==> prmId'
     @prmId = ""
-    r = @agent.get('https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/null/prms')
+    r = @agent.get(URL_GET_PRMS_ID)
     if (r.code != "200") then
       p 'authentication probably failed'
     else
@@ -151,28 +157,28 @@ public
       @prmId = user_data[0]['prmId']
     end
     
-     url = "https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/donnees-energie?dateDebut=20-7-2020&dateFin=4-8-2020&mesuretypecode=CONS"
-     p "get data url = #{url}"
-     r = @agent.get(url)
-     if (r.code != "200") then
-       p 'error'
-     end
-     p JSON.parse(r.body)
-
-     url = "https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/courbe-de-charge?dateDebut=1-8-2020&dateFin=4-8-2020&mesuretypecode=CONS"
-     p "get data url = #{url}"
-     r = @agent.get(url)
-     if (r.code != "200") then
-       p 'error'
-     end
-     p JSON.parse(r.body)
+#      url = "https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/donnees-energie?dateDebut=20-7-2020&dateFin=4-8-2020&mesuretypecode=CONS"
+#      p "get data url = #{url}"
+#      r = @agent.get(url)
+#      if (r.code != "200") then
+#        p 'error'
+#      end
+#      p JSON.parse(r.body)
+# 
+#      url = "https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/courbe-de-charge?dateDebut=1-8-2020&dateFin=4-8-2020&mesuretypecode=CONS"
+#      p "get data url = #{url}"
+#      r = @agent.get(url)
+#      if (r.code != "200") then
+#        p 'error'
+#      end
+#      p JSON.parse(r.body)
 
 #    p '---- agent ---'
 #    p @agent
-    p '---- cookie_jar ---'
-    @agent.cookie_jar.store.each do |c| 
-      p c.name
-      end
+#     p '---- cookie_jar ---'
+#     @agent.cookie_jar.store.each do |c| 
+#       p c.name
+#       end
 
   end
   
@@ -183,6 +189,10 @@ public
   # the data interval is specified with +step+ which can be +BY_YEAR+, +BY_MONTH+, +BY_DAY+ or +BY_HOUR+
   # the `result` is a +JSON+ object provided by the server
   def get(begin_date, end_date, step)
+
+    url = ""
+    begin_date = begin_date.strftime('%d-%m-%Y')
+    end_date = end_date.strftime('%d-%m-%Y')
     
     case step
     when BY_YEAR
@@ -190,40 +200,18 @@ public
     when BY_MONTH
       ressource_id = 'urlCdcMois'
     when BY_DAY
-      ressource_id = 'urlCdcJour'
+      url = "https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/donnees-energie?dateDebut=#{begin_date}&dateFin=#{end_date}&mesuretypecode=CONS"
     when BY_HOUR
-      ressource_id = 'urlCdcHeure'
+      url = "https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/courbe-de-charge?dateDebut=#{begin_date}&dateFin=#{end_date}&mesuretypecode=CONS"
     else
       raise(ArgumentError, 'wrong value for step argument')
     end
     
-    begin_date = begin_date.strftime('%d/%m/%Y')
-    end_date = end_date.strftime('%d/%m/%Y')
-    
-    request = 
-    {
-      'p_p_id' => REQUEST_WAR_NAME,
-      'p_p_lifecycle' => 2,
-      'p_p_state'=> 'normal',
-      'p_p_mode'=> 'view',
-      'p_p_resource_id' => ressource_id,
-      'p_p_cacheability'=> 'cacheLevelPage',
-      'p_p_col_id' => 'column-1',
-      'p_p_col_pos'=> 1,
-      'p_p_col_count' => 3,
-      '_' + REQUEST_WAR_NAME + '_dateDebut' => begin_date,
-      '_' + REQUEST_WAR_NAME + '_dateFin'  => end_date
-    }
-    
-    page = @agent.get(CONSUMPTION_MONITORING_URL, request)
-    if (page.code.to_i == 302) then
-      page = @agent.get(CONSUMPTION_MONITORING_URL, request)
-    end
-    
-    if (page.code.to_i == 200) then
-      json_result = JSON.parse(page.body)
-    else
+    page = @agent.get(url)
+    if (page.code != "200") then
       raise('Unable to retrieve data')
+    else
+      json_result = JSON.parse(page.body)
     end
     
     return json_result
@@ -231,13 +219,6 @@ public
 
   
 protected
-
-  LOGIN_URL = 'https://espace-client-connexion.enedis.fr/auth/UI/Login'
-  HOME_URL = 'https://mon-compte.enedis.fr/accueil'
-  CONSUMPTION_MONITORING_URL = 'https://espace-client-particuliers.enedis.fr/group/espace-particuliers/suivi-de-consommation'
-  
-  REQUEST_WAR_NAME = 'lincspartdisplaycdc_WAR_lincspartcdcportlet'
-
   ##
   # This function initializes the +Mechanize+ agent used to get data from site  
   def create_agent()

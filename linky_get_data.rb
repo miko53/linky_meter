@@ -23,14 +23,14 @@ authentication_cookie = ENV['LINKY_COOKIE_INTERNAL_AUTH_ID']
 linky = LinkyMeter.new(true)
 linky.connect(username, password, authentication_cookie)
 
-# result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_YEAR)
-# p result
-# 
-# result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
-# p result
-# 
+result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_YEAR)
+p result
+ 
+result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
+p result
+ 
 result = linky.get(DateTime.new(2020, 8, 1), DateTime.new(2020, 8, 6), LinkyMeter::BY_DAY)
 p result
-# 
+ 
 result = linky.get(DateTime.new(2020, 8, 1), DateTime.new(2020, 8, 6), LinkyMeter::BY_HOUR)
 p result

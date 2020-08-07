@@ -14,21 +14,23 @@
 
 #load 'linky_meter.rb'
 require_relative 'linky_meter'
+require 'byebug'
 
 username = ENV['LINKY_USERNAME']
 password = ENV['LINKY_PASSWORD']
+authentication_cookie = ENV['LINKY_COOKIE_INTERNAL_AUTH_ID']
 
-linky = LinkyMeter.new
-linky.connect(username, password)
+linky = LinkyMeter.new(true)
+linky.connect(username, password, authentication_cookie)
 
-result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_YEAR)
-p result
-
-result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
-p result
-
-result = linky.get(DateTime.new(2020, 02, 13), DateTime.new(2020, 03, 13), LinkyMeter::BY_DAY)
-p result
-
-result = linky.get(DateTime.new(2020, 03, 13), DateTime.new(2020, 03, 14), LinkyMeter::BY_HOUR)
-p result
+# result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_YEAR)
+# p result
+# 
+# result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
+# p result
+# 
+# result = linky.get(DateTime.new(2020, 02, 13), DateTime.new(2020, 03, 13), LinkyMeter::BY_DAY)
+# p result
+# 
+# result = linky.get(DateTime.new(2020, 03, 20), DateTime.new(2020, 03, 21), LinkyMeter::BY_HOUR)
+# p result

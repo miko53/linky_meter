@@ -56,13 +56,13 @@ public
     cookie.path = "/"
     @agent.cookie_jar.add(URI.parse(URL_COOKIE), cookie)
     url = URL_ENEDIS_AUTHENTICATE
-    @agent.log.info("LinkyMeter: step 1 : authentification #{url}")
+    @agent.log.info("LinkyMeter: step 1 : authentification #{url}") unless @agent.log == nil
     r = @agent.get(url)
     if (r.code != "200") then
       raise("Reception Error #{r.code} expected code 200")
     end
     
-    @agent.log.info('LinkyMeter: reception request SAML')
+    @agent.log.info('LinkyMeter: reception request SAML') unless @agent.log == nil
     samlRequest = r.form.field('SAMLRequest').value
     url = r.form.action
     
@@ -71,13 +71,13 @@ public
       'SAMLRequest' => samlRequest
     }
     
-    @agent.log.info("LinkyMeter: step 2 : send SSO SAMLRequest #{url}")
+    @agent.log.info("LinkyMeter: step 2 : send SSO SAMLRequest #{url}") unless @agent.log == nil
     r = @agent.post(url, request)
     if r.code != "302" then
       raise("Reception Error #{r.code} expected : 302")
     end
     
-    @agent.log.info('LinkyMeter: get the location and the reqID')
+    @agent.log.info('LinkyMeter: get the location and the reqID') unless @agent.log == nil
     #p r.header['location']
     reqID = r.header['location'].match(/ReqID%(.*?)%26/)[1]
     #p reqID
@@ -86,7 +86,7 @@ public
     url = "https://mon-compte.enedis.fr/auth/json/authenticate?realm=/enedis&forward=true&spEntityID=SP-ODW-PROD&goto=/auth/SSOPOST/metaAlias/enedis/providerIDP?ReqID%#{reqID}%26index%3Dnull%26acsURL%3Dhttps://apps.lincs.enedis.fr/saml/SSO%26spEntityID%3DSP-ODW-PROD%26binding%3Durn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AMAuthCookie="
     #p url
     
-    @agent.log.info("LinkyMeter: step 3 : auth 1 - retrieve the template (thanks to cookie internalAuthId, the user is already set)")
+    @agent.log.info("LinkyMeter: step 3 : auth 1 - retrieve the template (thanks to cookie internalAuthId, the user is already set)") unless @agent.log == nil
     r = @agent.post(url)
     if (r.code != "200") then
       raise("Reception error #{r.code} expected 200")
@@ -102,21 +102,21 @@ public
     auth_data_basic['callbacks'][1]['input'][0]['value'] = password
     
     url = "https://mon-compte.enedis.fr/auth/json/authenticate?realm=/enedis&spEntityID=SP-ODW-PROD&goto=/auth/SSOPOST/metaAlias/enedis/providerIDP?ReqID%#{reqID}%26index%3Dnull%26acsURL%3Dhttps://apps.lincs.enedis.fr/saml/SSO%26spEntityID%3DSP-ODW-PROD%26binding%3Durn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AMAuthCookie="
-    @agent.log.info('LinkyMeter: step 3 : auth 2 - send the auth data')
-    r = @agent.post(url, auth_data_basic.to_json, {'Content-Type' => 'application/json'})
+    @agent.log.info('LinkyMeter: step 3 : auth 2 - send the auth data') unless @agent.log == nil
+    r = @agent.post(url, auth_data_basic.to_json, {'Content-Type' => 'application/json'}) 
     if (r.code != "200") then
       raise("Reception error #{r.code} expected 200")
     end
     
     auth_url_data = JSON.parse(r.body)    
     
-    @agent.log.info('LinkyMeter: add the tokenId cookie')
+    @agent.log.info('LinkyMeter: add the tokenId cookie') unless @agent.log == nil
     cookie = Mechanize::Cookie.new('enedisExt', auth_url_data['tokenId'])
     cookie.domain = ".enedis.fr"
     cookie.path = "/"
     @agent.cookie_jar.add(URI.parse(URL_COOKIE), cookie)
     
-    @agent.log.info('LinkyMeter: step 4 : retrieve the SAMLresponse')
+    @agent.log.info('LinkyMeter: step 4 : retrieve the SAMLresponse') unless @agent.log == nil
     r = @agent.get(auth_url_data['successUrl'])
     if (r.code != "200") then
       raise("Reception error #{r.code} expected 200")
@@ -129,7 +129,7 @@ public
     'SAMLResponse' => response_data
     }
 
-    @agent.log.info('LinkyMeter: step 5 : post the SAMLresponse to finish the authentication')
+    @agent.log.info('LinkyMeter: step 5 : post the SAMLresponse to finish the authentication') unless @agent.log == nil
     r = @agent.post(url, request)
     #p r.code
     if (r.code != "302") then
@@ -138,7 +138,7 @@ public
     
     #get information
     @av2_interne_id = ""
-    @agent.log.info('LinkyMeter: get userinfos ==> retrieve  av2_interne_id')
+    @agent.log.info('LinkyMeter: get userinfos ==> retrieve  av2_interne_id') unless @agent.log == nil
     r = @agent.get(URL_USER_INFOS)
     if (r.code != "200") then
       raise('authentication probably failed')
@@ -147,7 +147,7 @@ public
       @av2_interne_id = user_data['userProperties']['av2_interne_id']
     end
      
-    @agent.log.info('LinkyMeter: retrieve primary key ==> prmId')
+    @agent.log.info('LinkyMeter: retrieve primary key ==> prmId') unless @agent.log == nil
     @prmId = ""
     r = @agent.get(URL_GET_PRMS_ID)
     if (r.code != "200") then
@@ -157,7 +157,7 @@ public
       @prmId = user_data[0]['prmId']
     end
     
-    @agent.log.info("LinkyMeter: authentication done #{@av2_interne_id} #{@prmId}")
+    @agent.log.info("LinkyMeter: authentication done #{@av2_interne_id} #{@prmId}") unless @agent.log == nil
   end
   
   ##

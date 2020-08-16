@@ -15,7 +15,7 @@
 require 'date'
 require 'mechanize'
 require 'json'
-require 'byebug'
+#require 'byebug'
 
 ##
 # This class is used to retrieve data from the electrical meter

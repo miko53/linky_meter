@@ -8,5 +8,8 @@ Gem::Specification.new do |s|
   s.email       = 'miko53@free.fr'
   s.files       = ["lib/linky_meter.rb"]
   s.homepage    = 'https://github.com/miko53/linky_meter'
-  s.license     = 'GPLv3'
+  s.license     = 'GPL-3.0'
+  s.add_runtime_dependency('mechanize', '~> 2.7.6', '>= 2.7.6')
+#  s.add_runtime_dependency('byebug'', '~> 0')
+  s.add_runtime_dependency('json', '~> 2.3.0', '>= 2.3.0' )
 end

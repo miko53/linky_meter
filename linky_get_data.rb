@@ -13,7 +13,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #load 'linky_meter.rb'
-require_relative 'linky_meter'
+require_relative 'lib/linky_meter'
 require 'byebug'
 
 username = ENV['LINKY_USERNAME']

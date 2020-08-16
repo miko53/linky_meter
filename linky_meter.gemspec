@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
   s.license     = 'GPL-3.0'
   s.add_runtime_dependency('mechanize', '~> 2.7.6', '>= 2.7.6')
 #  s.add_runtime_dependency('byebug'', '~> 0')
-  s.add_runtime_dependency('json', '~> 2.3.0', '>= 2.3.0' )
+  s.add_runtime_dependency('json', '~> 1.8.3', '>= 1.8.3' )
 end

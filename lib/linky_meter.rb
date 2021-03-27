@@ -87,7 +87,13 @@ public
     #p url
     
     @agent.log.info("LinkyMeter: step 3 : auth 1 - retrieve the template (thanks to cookie internalAuthId, the user is already set)") unless @agent.log == nil
-    r = @agent.post(url)
+    headers = {
+            'X-NoSession' => true,
+            'X-Password' => 'anonymous',
+            'X-Requested-With' => 'XMLHttpRequest',
+            'X-Username' => 'anonymous'
+            }
+    r = @agent.post(url, [], headers)
     if (r.code != "200") then
       raise("Reception error #{r.code} expected 200")
     end
@@ -103,7 +109,14 @@ public
     
     url = "https://mon-compte.enedis.fr/auth/json/authenticate?realm=/enedis&spEntityID=SP-ODW-PROD&goto=/auth/SSOPOST/metaAlias/enedis/providerIDP?ReqID%#{reqID}%26index%3Dnull%26acsURL%3Dhttps://apps.lincs.enedis.fr/saml/SSO%26spEntityID%3DSP-ODW-PROD%26binding%3Durn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AMAuthCookie="
     @agent.log.info('LinkyMeter: step 3 : auth 2 - send the auth data') unless @agent.log == nil
-    r = @agent.post(url, auth_data_basic.to_json, {'Content-Type' => 'application/json'}) 
+        headers = {
+                'Content-Type' => 'application/json',
+                'X-NoSession' => true,
+                'X-Password' => 'anonymous',
+                'X-Requested-With' => 'XMLHttpRequest',
+                'X-Username' => 'anonymous'
+                }
+    r = @agent.post(url, auth_data_basic.to_json, headers)
     if (r.code != "200") then
       raise("Reception error #{r.code} expected 200")
     end

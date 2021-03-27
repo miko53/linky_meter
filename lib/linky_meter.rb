@@ -22,7 +22,7 @@ require 'json'
 class LinkyMeter
 
 protected
-  URL_ENEDIS_AUTHENTICATE = 'https://apps.lincs.enedis.fr/authenticate?target=https://mon-compte-particulier.enedis.fr/suivi-de-mesure/'  
+  URL_ENEDIS_AUTHENTICATE = 'https://apps.lincs.enedis.fr/authenticate?target=https://mon-compte-particulier.enedis.fr/suivi-de-mesures/'
   URL_COOKIE = 'https://mon-compte-particulier.enedis.fr'
   URL_USER_INFOS = 'https://apps.lincs.enedis.fr/userinfos'
   URL_GET_PRMS_ID = 'https://apps.lincs.enedis.fr/mes-mesures/api/private/v1/personnes/null/prms'

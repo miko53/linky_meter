@@ -14,7 +14,7 @@
 
 #load 'linky_meter.rb'
 require_relative 'lib/linky_meter'
-require 'byebug'
+# require 'byebug'
 
 username = ENV['LINKY_USERNAME']
 password = ENV['LINKY_PASSWORD']

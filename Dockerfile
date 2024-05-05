@@ -16,9 +16,9 @@ RUN gem install *.gem
 
 RUN ln -s /home/ruby/app/bin/parser.sh /usr/local/bin/parser \
     && chmod +x /home/ruby/app/bin/parser.sh
+RUN ln -s /home/ruby/app/bin/parserPower.sh /usr/local/bin/parserPower \
+    && chmod +x /home/ruby/app/bin/parserPower.sh
 
-RUN ln -s /home/ruby/app/bin/parser-http.sh /usr/local/bin/parser-http \
-    && chmod +x /home/ruby/app/bin/parser-http.sh
 RUN ln -s /home/ruby/app/bin/server.sh /usr/local/bin/server \
     && chmod +x /home/ruby/app/bin/server.sh
 

@@ -1,0 +1,54 @@
+name: "linky_meter"
+
+services:
+
+  linky_meter:
+
+    container_name: "linky_meter"
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+#        - linux/arm64
+    image: linky_meter:latest
+
+    environment:
+      LINKY_USERNAME_FILE: /run/secrets/enedis_user
+      LINKY_PASSWORD_FILE: /run/secrets/enedis_pass
+      LINKY_COOKIE_INTERNAL_AUTH_ID_FILE: /run/secrets/enedis_cookie
+
+    hostname: enedis-api.domosplatch.fr
+
+    restart: unless-stopped
+
+    volumes:
+      - ./data/log/mechanize.log:/home/ruby/app/mechanize.log:rw
+
+    ports:
+      - 127.0.0.1:5555:80
+
+    secrets:
+      - enedis_user
+      - enedis_pass
+      - enedis_cookie
+
+
+
+secrets:
+  enedis_user:
+    file: ./config/enedis_user.cfg
+  enedis_pass:
+    file: ./config/enedis_pass.cfg
+  enedis_cookie:
+    file: ./config/enedis_cookie.cfg
+
+
+
+
+
+# Docker build :
+# docker login <registry_url>
+# docker buildx create --name container --driver=docker-container
+# docker compose build --builder container --push

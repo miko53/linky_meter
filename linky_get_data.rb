@@ -30,7 +30,7 @@ linky.connect(username, password, authentication_cookie)
 #p result
 
 result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 17), LinkyMeter::BY_DAY)
-p result
+puts JSON.generate(result)
 
 #result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 15), LinkyMeter::BY_HOUR)
 #p result

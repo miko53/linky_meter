@@ -15,6 +15,7 @@ services:
     image: linky_meter:latest
 
     environment:
+      DEBUG: ${DEBUG:-false}
       LINKY_USERNAME_FILE: /run/secrets/enedis_user
       LINKY_PASSWORD_FILE: /run/secrets/enedis_pass
       LINKY_COOKIE_INTERNAL_AUTH_ID_FILE: /run/secrets/enedis_cookie

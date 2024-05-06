@@ -6,7 +6,7 @@ ENV TZ="Europe/Paris"
 
 RUN adduser -g "ruby" -h "/home/ruby" -s "/dev/null" -D ruby
 
-RUN apk add --no-cache build-base
+RUN apk add --no-cache build-base tzdata
 
 WORKDIR /home/ruby/app
 

@@ -18,15 +18,13 @@ function handleRequest() {
     [[ "${trline}" =~ ${HEADLINE_REGEX} ]] &&
       REQUEST=$(echo $trline | sed -E "s/${HEADLINE_REGEX}/\1 \2/")
 
-    DATE_FROM_REGEX='Date-From:\s(.*?)'
+    DATE_FROM_REGEX='date-from:\s(.*?)'
     [[ "$trline" =~ $DATE_FROM_REGEX ]] &&
       DATE_FROM=$(echo $trline | sed -E "s/$DATE_FROM_REGEX/\1/")
 
-    DATE_TO_REGEX='Date-To:\s(.*?)'
+    DATE_TO_REGEX='date-to:\s(.*?)'
     [[ "$trline" =~ $DATE_TO_REGEX ]] &&
       DATE_TO=$(echo $trline | sed -E "s/$DATE_TO_REGEX/\1/")
-
-
   done
 
   case "${REQUEST}" in

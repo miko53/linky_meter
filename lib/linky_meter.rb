@@ -24,9 +24,12 @@ class LinkyMeter
 protected
   URL_ENEDIS_AUTHENTICATE = 'https://alex-pcy.microapplications.enedis.fr/authenticate?target=https://mon-compte-client.enedis.fr/suivi-de-mesures/'
   URL_COOKIE = 'https://mon-compte.enedis.fr'
-  URL_USER_INFOS = 'https://alex.microapplications.enedis.fr/mon-compte-client/api/private/v1/userinfos?espace=PARTICULIER'
-  URL_USER_INFOS_2 = 'https://alex.microapplications.enedis.fr/userinfos'
-  URL_GET_PRMS_ID = 'https://alex.microapplications.enedis.fr/mes-mesures/api/private/v1/personnes/null/prms'
+  URL_USER_INFOS = 'https://alex.microapplications.enedis.fr/mon-compte-client/api/private/v1/userinfos'
+  URL_USER_INFOS_2 = 'https://alex.microapplications.enedis.fr/mon-compte-client/api/private/v2/userinfos?espace=PARTICULIER'
+
+  def get_url_prms_id(av2_interne_id)
+    "https://alex.microapplications.enedis.fr/mes-prms-part/api/private/v2/personnes/#{av2_interne_id}/prms"
+  end
 
 public
   ##
@@ -165,16 +168,17 @@ public
     end
 
     user_data = JSON.parse(r.body)
-    @av2_interne_id = user_data['userProperties']['av2_interne_id']
+    @av2_interne_id = user_data['cnAlex']
 
     @agent.log.info('LinkyMeter: retrieve primary key ==> prmId') unless @agent.log == nil
     @prmId = ""
-    r = @agent.get(URL_GET_PRMS_ID)
+    url = get_url_prms_id(@av2_interne_id)
+    r = @agent.get(url)
     if (r.code != "200") then
       raise('authentication probably failed')
     else
       user_data = JSON.parse(r.body)
-      @prmId = user_data[0]['prmId']
+      @prmId = user_data[0]['idPrm']
     end
 
     @agent.log.info("LinkyMeter: authentication done #{@av2_interne_id} #{@prmId}") unless @agent.log == nil
@@ -189,16 +193,18 @@ public
   def get(begin_date, end_date, step)
 
     url = ""
-    begin_date = begin_date.strftime('%d-%m-%Y')
-    end_date = end_date.strftime('%d-%m-%Y')
+    begin_date = begin_date.strftime('%Y-%m-%d')
+
+    #no more used
+    end_date = end_date.strftime('%Y-%m-%d')
 
     case step
 
       when BY_YEAR, BY_MONTH, BY_DAY
-        url = "https://alex.microapplications.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/donnees-energie?dateDebut=#{begin_date}&dateFin=#{end_date}&mesuretypecode=CONS"
+        url = "https://alex.microapplications.enedis.fr/mes-mesures-prm/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/donnees-energetiques?mesuresTypeCode=ENERGIE&mesuresCorrigees=false&typeDonnees=CONS&dateDebut=#{begin_date}"
 
       when BY_HOUR
-        url = "https://alex.microapplications.enedis.fr/mes-mesures/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/courbe-de-charge?dateDebut=#{begin_date}&dateFin=#{end_date}&mesuretypecode=CONS"
+        url = "https://alex.microapplications.enedis.fr/mes-mesures-prm/api/private/v1/personnes/#{@av2_interne_id}/prms/#{@prmId}/donnees-energetiques?mesuresTypeCode=COURBE&mesuresCorrigees=false&typeDonnees=CONS&dateDebut=#{begin_date}"
 
       else
         raise(ArgumentError, 'wrong value for step argument')
@@ -211,7 +217,7 @@ public
       json_result = JSON.parse(page.body)
     end
 
-    return json_result
+    json_result
   end
 
 

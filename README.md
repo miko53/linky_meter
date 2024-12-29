@@ -2,7 +2,7 @@
 
 script to retrieve data from linky meter (french electrical meter provided by enedis).
 
-This version is now compatible of new API of enedis (*deployed from feb. 2024*).
+This version is now compatible of new API of enedis (*deployed from dec. 2024*).
 
 By the way, to avoid the captcha login, it is necessary to log before on a classical browser (e.g Chrome, Firefox) and to retrieve the user cookies (internalAuthId).
 With this method, a login/password is required for the authentification.

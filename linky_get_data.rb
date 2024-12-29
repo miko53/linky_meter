@@ -29,8 +29,8 @@ linky.connect(username, password, authentication_cookie)
 #result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
 #p result
 
-result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 17), LinkyMeter::BY_DAY)
+result = linky.get(DateTime.new(2024, 12, 26), DateTime.new(2024, 12, 27), LinkyMeter::BY_DAY)
 p result
 
-#result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 15), LinkyMeter::BY_HOUR)
-#p result
+result = linky.get(DateTime.new(2024, 12, 26), DateTime.new(2024, 12, 27), LinkyMeter::BY_HOUR)
+p result

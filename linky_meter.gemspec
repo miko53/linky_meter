@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'linky_meter'
-  s.version     = '0.1.0'
-  s.date        = '2024-04-19'
+  s.version     = '0.1.1'
+  s.date        = '2024-12-29'
   s.summary     = "retrieve eletrical consumption with linky "
   s.description = "A web crawler to linky data from your enedis account"
   s.authors     = ["miko53"]

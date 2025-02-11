@@ -27,5 +27,8 @@ linky = LinkyMeter.new(LOG)
 linky.connect(username, password, authentication_cookie)
 
 result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 17), LinkyMeter::BY_DAY)
+
+# Not need to pass date to linky_meter because enedis will give every date what they have in stock (~3y)
 #result = linky.get(DateTime.iso8601(dateFrom), DateTime.iso8601(dateTo), LinkyMeter::BY_DAY)
+
 puts JSON.generate(result)

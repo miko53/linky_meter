@@ -11,8 +11,8 @@ services:
       dockerfile: Dockerfile
       platforms:
         - linux/amd64
-#        - linux/arm64
-    image: linky_meter:latest
+        - linux/arm64
+    image: miko53/linky_meter:latest
 
     environment:
       DEBUG: ${DEBUG:-false}

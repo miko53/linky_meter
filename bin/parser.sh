@@ -18,4 +18,4 @@ fi
 LINKY_USERNAME="${_U:-LINKY_USERNAME}" \
 LINKY_PASSWORD="${_P:-LINKY_PASSWORD}" \
 LINKY_COOKIE_INTERNAL_AUTH_ID="${_C:-LINKY_COOKIE_INTERNAL_AUTH_ID}" \
-ruby /home/ruby/app/linky_get_data.rb
+ruby /home/ruby/app/linky_get_data_day.rb

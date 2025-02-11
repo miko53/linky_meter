@@ -19,19 +19,13 @@ require_relative 'lib/linky_meter'
 username = ENV['LINKY_USERNAME']
 password = ENV['LINKY_PASSWORD']
 authentication_cookie = ENV['LINKY_COOKIE_INTERNAL_AUTH_ID']
+# dateFrom = ENV['DATE_FROM']
+# dateTo = ENV['DATE_TO']
 LOG = (ENV['DEBUG'] === 'true')
 
 linky = LinkyMeter.new(LOG)
 linky.connect(username, password, authentication_cookie)
 
-#result = linky.get(DateTime.new(2028, 03, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_YEAR)
-#p result
-
-#result = linky.get(DateTime.new(2020, 01, 01), DateTime.new(2020, 03, 01), LinkyMeter::BY_MONTH)
-#p result
-
 result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 17), LinkyMeter::BY_DAY)
+#result = linky.get(DateTime.iso8601(dateFrom), DateTime.iso8601(dateTo), LinkyMeter::BY_DAY)
 puts JSON.generate(result)
-
-#result = linky.get(DateTime.new(2024, 04, 15), DateTime.new(2024, 04, 15), LinkyMeter::BY_HOUR)
-#p result

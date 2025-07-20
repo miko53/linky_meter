@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.files       = ["lib/linky/linky_meter.rb"]
   s.homepage    = 'https://github.com/miko53/linky_meter'
   s.license     = 'GPL-3.0'
-  s.add_runtime_dependency('mechanize', '~> 2.14.0', '>= 2.14.0')
+  s.add_runtime_dependency('mechanize', '~> 2.7.7', '>= 2.7.7')
 #  s.add_development_dependency('byebug'', '~> 0')
   s.add_runtime_dependency('json', '~> 2.6.1', '>= 2.6.1' )
 end

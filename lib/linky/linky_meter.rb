@@ -11,8 +11,8 @@ module Linky
     protected
 
     URL_COOKIE = 'https://mon-compte.enedis.fr'
-    URL_USER_INFOS = '/mon-compte-client/api/private/v1/userinfos'
-    URL_USER_INFOS_2 = '/mon-compte-client/api/private/v2/userinfos?espace=PARTICULIER'
+    URL_USER_INFOS = '/mon-compte/api/private/v2/userinfos'
+    URL_USER_INFOS_2 = '/mon-compte/api/private/v2/userinfos?espace=PARTICULIER'
 
     def get_url_prms_id(av2_interne_id)
       "/mes-prms-part/api/private/v2/personnes/#{av2_interne_id}/prms"
@@ -162,7 +162,7 @@ module Linky
       # p r
       # code = 307
 
-      headers['Referer'] = 'https://mon-compte.enedis.fr'
+      headers['Referer'] = 'https://mon-compte-client.enedis.fr'
 
       # get information
       @av2_interne_id = ''

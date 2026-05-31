@@ -111,6 +111,8 @@ module Linky
       client_id = params['client_id'].first
       nonce = params['nonce'].first
       state = params['state'].first
+      code_challenge = params['code_challenge'].first
+      code_challenge_method = params['code_challenge_method'].first
 
       @agent.log&.info("LinkyMeter: client_id=#{client_id} state=#{state} nonce=#{nonce}")
 
@@ -145,7 +147,7 @@ module Linky
       r = @agent.get(url)
       # p r
 
-      url = "/auth/oauth2/enedis/authorize?response_type=code&client_id=#{client_id}&scope=openid%20email%20profile&state=#{state}&redirect_uri=https%3A%2F%2Falex.microapplications.enedis.fr%2Flogin%2Foauth2%2Fcode%2Falexwebsso&nonce=#{nonce}"
+      url = "/auth/oauth2/enedis/authorize?response_type=code&client_id=#{client_id}&scope=openid%20email%20profile&state=#{state}&redirect_uri=https%3A%2F%2Falex.microapplications.enedis.fr%2Flogin%2Foauth2%2Fcode%2Falexwebsso&nonce=#{nonce}&code_challenge=#{code_challenge}&code_challenge_method=#{code_challenge_method}"
       r = @agent.get(url)
       # p r
       # code = 302

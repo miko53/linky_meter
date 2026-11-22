@@ -1,5 +1,7 @@
 # frozen_string_literal: true
+require 'cgi'
 require 'date'
+require 'logger'
 require 'mechanize'
 require 'json'
 # require 'byebug'
